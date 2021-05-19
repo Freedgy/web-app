@@ -12,6 +12,8 @@ import { useStaticQuery, graphql } from "gatsby"
 import Header from "../header/header"
 import "./layout.css"
 
+import {useUserContext} from "../../context/user"
+
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -22,6 +24,11 @@ const Layout = ({ children }) => {
       }
     }
   `)
+
+  const user = useUserContext();
+  if (!user.loggedIn) {
+    window.location.href="/user/Login/"
+  }
 
   return (
     <>

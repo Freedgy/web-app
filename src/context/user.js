@@ -39,4 +39,6 @@ class UserProvider extends React.Component {
     }
 }
 
-export { UserProvider }
+const useUserContext = () => React.useContext(UserContext);
+
+export { UserProvider, useUserContext }
