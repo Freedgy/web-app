@@ -11,11 +11,15 @@ class Signup extends React.Component {
         super(props);
 
         this.state = {
-            pseudo: "",
+            mail: "",
+            name: "",
+            last_name: "",
             pwd: "",
             checked: false,
             validated: false,
-            pseudoError: "",
+            mailError: "",
+            nameError: "",
+            last_nameError: "",
             passwordError: "",
         };
     }
@@ -29,26 +33,35 @@ class Signup extends React.Component {
         event.preventDefault();
         event.stopPropagation();
         if (form.checkValidity() === true) {
-            var url = "http://localhost:"+process.env.REACT_APP_SERVER_PORT+"/user/register"
+            var url = "http://localhost:8080/user/register"
             var data = {
-                username: this.state.pseudo,
+                name: this.state.name,
+                last_name: this.state.last_name,
                 password: this.state.pwd,
-                enrollment: this.state.checked
+                email: this.state.mail
             }
             axios.post(url, data)
             .then((rep) => {
-                setToken(rep.data.accessToken)
-                signIn({user_name: data.user_name, id : rep.data.id})
+                setToken("41df65b1df56r16er")
+                signIn({name: data.name, last_name : data.last_name, email: data.email})
                 window.location.href = "/"
             }).catch(() => {
                 this.setState({
-                    pseudoError: "user already exist",
+                    mailError: "user already exist",
                 })
             });
+            // var data = {
+            //     username: this.state.mail,
+            //     fakeid: "156871568162",
+            //     faketoken: "41df65b1df56r16er"
+            // }
+            // setToken(data.faketoken)
+            // signIn({user_name: data.username, id : data.fakeid})
+            // window.location.href = "/"
         } else {
-            if (this.state.pseudo === "") {
+            if (this.state.mail === "") {
                 this.setState({
-                    pseudoError: "Field must not be empty!",
+                    mailError: "Field must not be empty!",
                 })
             }
             if (this.state.pwd === "") {
@@ -67,7 +80,7 @@ class Signup extends React.Component {
     };
 
     render () {
-        const { pseudo, pwd, checked, validated, passwordError, pseudoError } = this.state;
+        const { mail, name, last_name, pwd, checked, validated, passwordError, mailError } = this.state;
         return (
             <Container className="vh-100">
                 <Row className="vh-100 justify-content-center align-items-center">
@@ -78,17 +91,41 @@ class Signup extends React.Component {
                                     <h3>Sign-up</h3>
                                 </Row>
                                 <Form noValidate validated={validated} onSubmit={this.handleSubmit}>
-                                    <Form.Group>
-                                        <Form.Label htmlFor="idPseudo">Pseudo</Form.Label>
+                                <Form.Group>
+                                        <Form.Label htmlFor="idmail">mail</Form.Label>
                                         <Form.Control
                                             required
-                                            id="idPseudo"
+                                            id="idmail"
                                             type="text"
-                                            placeholder="Pseudo"
-                                            value={pseudo}
-                                            onChange={e => this.setState({pseudo: e.target.value, validated: false, pseudoError: "", passwordError: ""})}
+                                            placeholder="mail"
+                                            value={mail}
+                                            onChange={e => this.setState({mail: e.target.value, validated: false, mailError: ""})}
                                         />
-                                        {pseudoError}
+                                        {mailError}
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label htmlFor="idname">name</Form.Label>
+                                        <Form.Control
+                                            required
+                                            id="idname"
+                                            type="text"
+                                            placeholder="name"
+                                            value={name}
+                                            onChange={e => this.setState({name: e.target.value, validated: false, nameError: ""})}
+                                        />
+                                        {mailError}
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label htmlFor="idmail">last_name</Form.Label>
+                                        <Form.Control
+                                            required
+                                            id="idlast_name"
+                                            type="text"
+                                            placeholder="last_name"
+                                            value={last_name}
+                                            onChange={e => this.setState({last_name: e.target.value, validated: false, last_nameError: ""})}
+                                        />
+                                        {mailError}
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label htmlFor="idPassword">Password</Form.Label>
@@ -98,7 +135,7 @@ class Signup extends React.Component {
                                             type="password"
                                             placeholder="Password"
                                             value={pwd}
-                                            onChange={e => this.setState({pwd: e.target.value, validated: false, pseudoError: "", passwordError: ""})}
+                                            onChange={e => this.setState({pwd: e.target.value, validated: false, passwordError: ""})}
                                         />
                                         {passwordError}
                                     </Form.Group>

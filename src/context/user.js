@@ -1,4 +1,5 @@
 import React from "react";
+import axios from 'axios';
 
 const defaultState = {
     token: null,
@@ -15,13 +16,40 @@ class UserProvider extends React.Component {
         loggedIn: false,
         user: {},
     }
-    componentDidMount() {
-        this.setState({
+    constructor(props) {
+        super(props)
+        this.state = {
             token: localStorage.getItem("token"),
             loggedIn: localStorage.getItem("loggedIn"),
             user: JSON.parse(localStorage.getItem("user")),    
-        })
+        }
+        console.log(localStorage)
     }
+    setToken = (token) => {
+        this.setState({ 
+            token: token
+        })
+        localStorage.setItem("token", token)
+        axios.defaults.headers.common['api_key'] = token;
+    }
+    signOut = () => {
+        this.setState({ 
+            loggedIn: false,
+            user: {}
+        })
+        localStorage.clear()
+        this.majorityCheckout()
+    }
+
+    signIn = (user) => {
+        this.setState({ 
+            loggedIn: true,
+            user: user
+        })
+        localStorage.setItem("loggedIn", true)
+        localStorage.setItem("user", JSON.stringify(user))
+    }
+
     render() {
         const { children } = this.props
         const { token, loggedIn, user } = this.state
@@ -30,7 +58,10 @@ class UserProvider extends React.Component {
             value={{
                 token,
                 loggedIn,
-                user
+                user,
+                setToken: this.setToken,
+                signOut: this.signOut,
+                signIn: this.signIn
             }}
         >
             {children}

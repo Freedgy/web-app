@@ -10,10 +10,10 @@ class Login extends React.Component {
         super(props);
 
         this.state = {
-            pseudo: "",
+            email: "",
             pwd: "",
             validated: false,
-            pseudoError: "",
+            emailError: "",
             passwordError: "",
         };
     }
@@ -27,26 +27,35 @@ class Login extends React.Component {
         event.preventDefault();
         event.stopPropagation();
         if (form.checkValidity() === true) {
-            var url = "http://localhost:"+process.env.REACT_APP_SERVER_PORT+"/user/login"
+            var url = "http://localhost:8080/user/login"
             var data = {
-                username: this.state.pseudo,
+                email: this.state.email,
                 password: this.state.pwd
             }
             axios.post(url, data)
             .then( (rep) => {
                 setToken(rep.data.accessToken)
-                signIn({user_name: data.username, id : rep.data.id})
+                signIn({email: data.email})
                 window.location.href = "/"
             }).catch( () => {
                 this.setState({
-                    pseudoError: "invalid pseudo or password",
-                    passwordError: "invalid pseudo or password"
+                    emailError: "invalid email or password",
+                    passwordError: "invalid email or password"
                 })
             });
+
+            // var data = {
+            //     username: this.state.email,
+            //     fakeid: "156871568162",
+            //     faketoken: "41df65b1df56r16er"
+            // }
+            // setToken(data.faketoken)
+            // signIn({user_name: data.username, id : data.fakeid})
+            // window.location.href = "/"
         } else {
-            if (this.state.pseudo === "") {
+            if (this.state.email === "") {
                 this.setState({
-                    pseudoError: "Field must not be empty!",
+                    emailError: "Field must not be empty!",
                 })
             }
             if (this.state.pwd === "") {
@@ -59,7 +68,7 @@ class Login extends React.Component {
     };
 
     render () {
-        const {pseudo, pwd, validated, passwordError, pseudoError } = this.state;
+        const {email, pwd, validated, passwordError, emailError } = this.state;
         return (
             <Container className="vh-100">
                 <Row className="vh-100 justify-content-center align-items-center">
@@ -71,16 +80,16 @@ class Login extends React.Component {
                                 </Row>
                                 <Form noValidate validated={validated} onSubmit={this.handleSubmit}>
                                     <Form.Group>
-                                        <Form.Label htmlFor="idPseudo">Pseudo</Form.Label>
+                                        <Form.Label htmlFor="idemail">email</Form.Label>
                                         <Form.Control
                                             required
-                                            id="idPseudo"
+                                            id="idemail"
                                             type="text"
-                                            placeholder="Pseudo"
-                                            value={pseudo}
-                                            onChange={e => this.setState({pseudo: e.target.value, validated: false, pseudoError: "", passwordError: ""})}
+                                            placeholder="email"
+                                            value={email}
+                                            onChange={e => this.setState({email: e.target.value, validated: false, emailError: "", passwordError: ""})}
                                         />
-                                        {pseudoError}
+                                        {emailError}
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Label htmlFor="idPassword">Password</Form.Label>
@@ -90,7 +99,7 @@ class Login extends React.Component {
                                             type="password"
                                             placeholder="Password"
                                             value={pwd}
-                                            onChange={e => this.setState({pwd: e.target.value, validated: false, pseudoError: "", passwordError: ""})}
+                                            onChange={e => this.setState({pwd: e.target.value, validated: false, emailError: "", passwordError: ""})}
                                         />
                                         {passwordError}
                                     </Form.Group>
