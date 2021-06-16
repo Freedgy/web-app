@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  app-http:
+    container_name: app-http
+    working_dir: /app
+    command: ./entrypoint.sh
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: freedgy/app:${APP_VERSION}
+    environment: 
+      DANGEROUSLY_DISABLE_HOST_CHECK: "true"
+    ports:
+      - "${APP_PORT_HTTP}:8000"
+    volumes:
+     - .:/app
+     - /app/node_modules/
