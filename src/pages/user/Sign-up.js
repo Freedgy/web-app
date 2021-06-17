@@ -33,7 +33,7 @@ class Signup extends React.Component {
         event.preventDefault();
         event.stopPropagation();
         if (form.checkValidity() === true) {
-            var url = "http://localhost:8080/user/register"
+            var url = "http://35.210.17.248:8080/user/register"
             var data = {
                 name: this.state.name,
                 last_name: this.state.last_name,
