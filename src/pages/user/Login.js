@@ -27,7 +27,7 @@ class Login extends React.Component {
         event.preventDefault();
         event.stopPropagation();
         if (form.checkValidity() === true) {
-            var url = "http://35.210.17.248:8080/user/login"
+            var url = "http://back.freedgy.com:8080/user/login"
             var data = {
                 email: this.state.email,
                 password: this.state.pwd
